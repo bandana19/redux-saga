@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
 
+import './App.css';
+import { Provider } from 'react-redux';
+import store from './service/store';
+import Header from './view/layout/Header';
+import Footer from './view/layout/Footer';
+import ProductList from './common/ProductList';
+import { useEffect, useState } from 'react';
 function App() {
+   const [arr,setArr]=useState([])
+    async function getData(){
+    let data=await fetch('https://dummyjson.com/products?limit=100')
+    let jsonData=await data.json()
+    setArr(jsonData?.products) 
+  }
+  useEffect(()=>{
+    getData()
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Header />
+      {/* <ProductList arr={arr}/> */}
+      <Footer/>
+    </Provider>
   );
 }
 
